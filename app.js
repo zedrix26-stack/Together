@@ -1,15 +1,6 @@
-/* =============================================================
-   TOGETHER - Couple Memory App
-   Persistent storage (IndexedDB + localStorage fallback), CRUD
-   and full Android-first UI logic.
-   ============================================================= */
-
 (function () {
     'use strict';
 
-    /* =========================================================
-       ICONS (SVG, consistent stroke style)
-       ========================================================= */
     var ICONS = {
         home: '<path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>',
         image: '<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>',
@@ -176,9 +167,7 @@
         setTimeout(function () { URL.revokeObjectURL(url); }, 1200);
     }
 
-    /* =========================================================
-       TOAST
-       ========================================================= */
+
     var toastTimer = null;
     function toast(msg, type) {
         var el = $('#toast');
@@ -190,9 +179,7 @@
         toastTimer = setTimeout(function () { el.hidden = true; }, 2600);
     }
 
-    /* =========================================================
-       CONFIRM DIALOG (promise based)
-       ========================================================= */
+   
     function confirmDialog(opts) {
         return new Promise(function (resolve) {
             var dlg = $('#confirmDialog');
@@ -224,9 +211,7 @@
         });
     }
 
-    /* =========================================================
-       IMAGE HANDLING (read + compress)
-       ========================================================= */
+  
     function loadImageFile(file) {
         return new Promise(function (resolve, reject) {
             var r = new FileReader();
@@ -293,9 +278,7 @@
         if (empty) empty.hidden = false;
     }
 
-    /* =========================================================
-       STORAGE LAYER (IndexedDB primary, localStorage fallback)
-       ========================================================= */
+   
     var IDB_NAME = 'together-db';
     var IDB_VERSION = 3;
     var STORES = ['couples', 'photos', 'memories', 'moments', 'milestones', 'chat', 'files'];
@@ -436,20 +419,18 @@
         }
     };
 
-    /* =========================================================
-       APP STATE
-       ========================================================= */
+
     var state = {
-        couples: [],          // all couple/profile docs
-        couple: null,         // active couple doc
+        couples: [],          
+        couple: null,         
         currentProfileId: null,
-        photos: [],           // in-memory lists for the active couple
+        photos: [],           
         memories: [],
         moments: [],
         milestones: [],
-        chats: [],            // chat messages for the active scope
-        chatIds: {},          // id dedupe map for chat
-        chatStatus: 'idle',   // online/offline for the chat connection
+        chats: [],            
+        chatIds: {},          
+        chatStatus: 'idle',   
         settings: null,
         syncCouple: false,
         coupleCode: null,
@@ -477,9 +458,7 @@
 
     state.settings = defaultSettings();
 
-    /* =========================================================
-       STORE (data access layer)
-       ========================================================= */
+   
     var Store = {
         saveCouple: function (c) {
             if (c && window.Sync && Sync.coupleId && String(Sync.coupleId) === String(c.id)) {
@@ -641,9 +620,7 @@
         }
     };
 
-    /* =========================================================
-       LEGACY MIGRATION (old localStorage format)
-       ========================================================= */
+ 
     function migrateLegacy() {
         return new Promise(function (resolve) {
             try {
@@ -708,9 +685,6 @@
         });
     }
 
-    /* =========================================================
-       CALCULATIONS
-       ========================================================= */
     var AUTO_MILESTONES = [
         { days: 30, label: '1 month together' },
         { days: 60, label: '2 months together' },
@@ -766,9 +740,7 @@
         return { list: list, next: next, anniversary: anniversary };
     }
 
-    /* =========================================================
-       RENDERING
-       ========================================================= */
+ 
     function avatarHTML(photo, text, cls) {
         return '<span class="avatar ' + (cls || 'avatar-xl') + '">' + (photo ? '<img src="' + photo + '" alt="">' : esc(text || '?')) + '</span>';
     }
@@ -974,14 +946,7 @@
         }).join('') + '</div>';
     }
 
-    /* =========================================================
-       CHAT
-       Couple messaging, text + photos.
-       Every message is mirrored through the couple's Supabase
-       sync, so chat works over any internet connection (mobile
-       data or Wi-Fi). Photo bytes upload to the couple-media
-       bucket, and a signed URL reaches the partner.
-       ========================================================= */
+
     var chatPendingPhoto = null;
     var REACTION_EMOJIS = ['\u2764\uFE0F', '\uD83D\uDE02', '\uD83D\uDE2E', '\uD83D\uDE22', '\uD83D\uDC4D', '\uD83D\uDD25'];
     var chatReactionTarget = null;
@@ -1380,7 +1345,7 @@
         chatLastTap = { time: now, cid: cid };
     }
 
-    /* ---- Swipe-to-reply ---- */
+   
     var swipeState = null;
 
     function chatSwipeStart(e) {
@@ -1717,9 +1682,7 @@
         renderMore();
     }
 
-    /* =========================================================
-       NAVIGATION
-       ========================================================= */
+  
     var currentTab = 'home';
 
     function goTab(tab) {
@@ -1952,9 +1915,7 @@
         });
     }
 
-    /* =========================================================
-       COUPLE SYNC (invite + realtime)
-       ========================================================= */
+  
     function showWelcomePage(pageId) {
         $$('.w-page').forEach(function (p) { p.hidden = (p.id !== pageId); });
     }
@@ -2456,9 +2417,7 @@
         });
     }
 
-    /* =========================================================
-       MEMORIES (timeline)
-       ========================================================= */
+
     var _saveBusy = {};
 
     function openAddMemory() {
@@ -2585,9 +2544,7 @@
         });
     }
 
-    /* =========================================================
-       MOMENTS
-       ========================================================= */
+
     function openAddMoment() {
         $('#sheetMomentTitle').textContent = 'Add Moment';
         $('#momEditId').value = '';
