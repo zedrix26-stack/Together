@@ -1,8 +1,3 @@
-/* =====================================================
-   SERVICE WORKER - PWA Offline Support
-   Caches resources for offline functionality
-   ===================================================== */
-
 const CACHE_NAME = 'together-v18';
 const urlsToCache = [
   '/',
