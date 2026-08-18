@@ -1,10 +1,3 @@
-/* =====================================================
-   TOGETHER SYNC ENGINE
-   Supabase backend (Postgres + Realtime + Storage +
-   anonymous auth) for cross-device couple sharing.
-   Local-first: IndexedDB remains the offline cache;
-   Supabase mirrors and syncs the couple.
-   ===================================================== */
 (function () {
     'use strict';
     window.DEBUG_SYNC = false;
@@ -590,9 +583,7 @@
         return this.init();
     };
 
-    /* =========================================================
-       COUPLE LIFECYCLE
-       ========================================================= */
+
     Sync.createCouple = function (opts) {
         var self = this;
         opts = opts || {};
@@ -681,9 +672,7 @@
         });
     };
 
-    /* =========================================================
-       ATTACH / SYNC
-       ========================================================= */
+
     Sync.attachCouple = function (coupleId) {
         var self = this;
         if (!this.ready || !this.authed) {
@@ -948,10 +937,7 @@
         }
         this._checkPartnerPresence();
     };
-
-    /* =========================================================
-       WRITES
-       ========================================================= */
+   
     Sync.push = function (store, rec) {
         if (!this.ready || !this.authed || !this.coupleId) return;
         if (STORE_COLLECTIONS.indexOf(store) < 0) return;
@@ -1076,9 +1062,7 @@
         return doUpsert(null);
     };
 
-    /* =========================================================
-       STORAGE
-       ========================================================= */
+
     Sync.hasStorage = function () {
         return true;
     };
