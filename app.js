@@ -1660,7 +1660,7 @@
         var isSyncCurrent = state.syncCouple && !!c && !!Sync.coupleId && String(Sync.coupleId) === String(c.id) && state.coupleCode;
         var syncMoreStatus = isSyncCurrent ? syncMoreLabel() : 'Local only';
         var code = state.coupleCode || (c && c.coupleCode) || '';
-        var partnerJoined = state.partnerJoined || (c && c.member2 && c.member2.joined);
+        var partnerJoined = state.partnerJoined || (c && c.member2 && c.member2.joined) || (c && c.person2 && c.person2.name);
         var partnerName = state.partnerName || (c && c.person2 && c.person2.name) || '';
 
         var coupleHTML = '<div class="group"><h4 class="group-title">Couple</h4><div class="list">' +
@@ -1850,6 +1850,10 @@
             if (c && c.coupleCode) {
                 state.syncCouple = true;
                 state.coupleCode = c.coupleCode;
+                if (!state.partnerName) {
+                    var pN = (c.person2 && c.person2.name) || '';
+                    if (pN) { state.partnerName = pN; state.partnerJoined = true; }
+                }
                 if (window.Sync && Sync.ready) Sync.attachCouple(c.id);
             } else {
                 state.syncCouple = false;
@@ -2201,8 +2205,8 @@
         var partnerIsM2 = String(m1Id) === String(selfId) ? true : (String(m2Id) === String(selfId) ? false : true);
         var partnerPerson = partnerIsM2 ? (couple.person2 || {}) : (couple.person1 || {});
         var partnerMember = partnerIsM2 ? (couple.member2 || {}) : (couple.member1 || {});
-        state.partnerJoined = !!(partnerMember.id);
-        state.partnerName = partnerPerson.name || partnerMember.name || '';
+        state.partnerJoined = !!(partnerMember.id) || state.partnerJoined;
+        state.partnerName = partnerPerson.name || partnerMember.name || state.partnerName || '';
         state.partnerOnline = !!partnerPerson.online;
         state.coupleCode = couple.inviteCode || state.coupleCode;
         if (state.currentProfileId === pid) {
@@ -4297,6 +4301,10 @@
             if (couples.length) {
                 var first = (data.couples && data.couples.length) ? data.couples[0].id : couples[0].id;
                 var importedCouple = couples.find(function (x) { return String(x.id) === String(first); });
+                if (importedCouple) {
+                    var pName = (importedCouple.person2 && importedCouple.person2.name) || '';
+                    if (pName) { state.partnerName = pName; state.partnerJoined = true; }
+                }
                 var code = importedCouple && importedCouple.coupleCode;
                 if (code && window.Sync && Sync.ready && Sync.authed) {
                     var selfName = (importedCouple.person1 && importedCouple.person1.name) || 'Person 1';
